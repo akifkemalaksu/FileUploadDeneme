@@ -144,17 +144,7 @@
                 type: "post",
                 url: "/home/AllFileLoad",
                 success: (result) => {
-                    resolve(
-                        result.map((x) => {
-                            return {
-                                caption: x.Name,
-                                key: x.FullName,
-                                size: x.Length,
-                                type: x.Extension,
-                                //downloadUrl: "/home/FileDownload"
-                            }
-                        })
-                    )
+                    resolve(result);
                 },
                 error: (jqXHR, exception) => {
                     reject({ jqXHR, exception });
@@ -169,20 +159,8 @@
     function RefreshFiles() {
         GetAllFilesFromDir().then((resolve) => {
             console.log(resolve);
-            let initialPreview = resolve.map((x) => {
-                if (previewFileIconSettings.hasOwnProperty(x.type)) {
-                    return previewFileIconSettings[x.type];
-                }
-                else {
-                    return previewFileIconSettings["default"];
-                }
-            });
-            let initialPreviewConfig = resolve;
-
-            console.log({ initialPreview, initialPreviewConfig });
-
-            options.initialPreview = initialPreview;
-            options.initialPreviewConfig = initialPreviewConfig;
+            options.initialPreview = resolve.initialPreview;
+            options.initialPreviewConfig = resolve.initialPreviewConfig;
             fileInput.fileinput('destroy').fileinput(options);
         })
             .catch((reject) => {

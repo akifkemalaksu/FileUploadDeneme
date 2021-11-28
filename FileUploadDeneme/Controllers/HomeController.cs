@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -32,20 +33,31 @@ namespace FileUploadDeneme.Controllers
         [HttpPost]
         public JsonResult AllFileLoad()
         {
+            var tempUploadsPath = Server.MapPath("~\\TempUploads");
+            Array.ForEach(Directory.GetFiles(tempUploadsPath), delegate (string path) { System.IO.File.Delete(path); });
+
             List<string> AllFiles = new List<string>();
             GetAllFiles(ref AllFiles, FileDir);
-            return Json(AllFiles.Select(x =>
+
+            List<string> initialPreview = new List<string>();
+            List<dynamic> initialPreviewConfig = AllFiles.Select(x =>
             {
                 var fileInfo = new FileInfo(x);
+                var tempFilePath = Path.Combine(tempUploadsPath, fileInfo.Name);
+                System.IO.File.Copy(fileInfo.FullName, tempFilePath);
+                initialPreview.Add($"<img src=\"${tempFilePath}\"/>");
                 return new
                 {
-                    fileInfo.Name,
-                    fileInfo.FullName,
-                    fileInfo.Length,
-                    Extension = fileInfo.Extension.Replace(".", ""),
-                    fileInfo.CreationTime
-                };
-            }));
+                    caption = fileInfo.Name,
+                    key = fileInfo.FullName,
+                    size = fileInfo.Length,
+                    type = fileInfo.Extension.Replace(".", ""),
+                    createdDate = fileInfo.CreationTime
+                } as dynamic;
+            }).ToList();
+
+
+            return Json(new { initialPreview, initialPreviewConfig });
         }
 
         private void GetAllFiles(ref List<string> AllFiles, string path)
