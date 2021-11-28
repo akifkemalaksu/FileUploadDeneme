@@ -1,0 +1,220 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<link href="~/CustomPlugins/KrajeeFileInput/css/fileinput.min.css" />
+
+<script src="~/CustomPlugins/KrajeeFileInput/js/fileinput.min.js"></script>
+<script src="~/CustomPlugins/KrajeeFileInput/js/plugins/piexif.min.js"></script>
+<script src="~/CustomPlugins/KrajeeFileInput/js/plugins/sortable.min.js"></script>
+<script src="~/CustomPlugins/KrajeeFileInput/js/locales/LANG.js"></script>
+<script src="~/CustomPlugins/KrajeeFileInput/themes/explorer-fas/theme.min.js"></script>
+
+
+<form>
+    <input id="files" name="files" type="file" class="file" multiple>
+</form>
+
+<script type="text/javascript">
+    let fileInput = $("#files");
+
+    let previewFileIconSettings = { // configure your icon file extensions
+        'doc': '<i class="fas fa-file-word text-primary"></i>',
+        'xls': '<i class="fas fa-file-excel text-success"></i>',
+        'ppt': '<i class="fas fa-file-powerpoint text-danger"></i>',
+        'pdf': '<i class="fas fa-file-pdf text-danger"></i>',
+        'zip': '<i class="fas fa-file-archive text-muted"></i>',
+        'htm': '<i class="fas fa-file-code text-info"></i>',
+        'txt': '<i class="fas fa-file-alt text-info"></i>',
+        'mov': '<i class="fas fa-file-video text-warning"></i>',
+        'mp3': '<i class="fas fa-file-audio text-warning"></i>',
+        // note for these file types below no extension determination logic
+        // has been configured (the keys itself will be used as extensions)
+        'jpg': '<i class="fas fa-file-image text-danger"></i>',
+        'gif': '<i class="fas fa-file-image text-muted"></i>',
+        'png': '<i class="fas fa-file-image text-primary"></i>'
+    };
+    let previewFileExtSettings = { // configure the logic for determining icon file extensions
+        'doc': function (ext) {
+            return ext.match(/(doc|docx)$/i);
+        },
+        'xls': function (ext) {
+            return ext.match(/(xls|xlsx)$/i);
+        },
+        'ppt': function (ext) {
+            return ext.match(/(ppt|pptx)$/i);
+        },
+        'zip': function (ext) {
+            return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+        },
+        'htm': function (ext) {
+            return ext.match(/(htm|html)$/i);
+        },
+        'txt': function (ext) {
+            return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
+        },
+        'mov': function (ext) {
+            return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+        },
+        'mp3': function (ext) {
+            return ext.match(/(mp3|wav)$/i);
+        }
+    };
+
+    let options = {
+        language: "tr",
+        required: true,
+        uploadUrl: "Home/fileUpload",
+        deleteUrl: "Home/fileDelete",
+        initialPreviewDownloadUrl: "/home/FileDownload",
+        showClose: false,
+        browseOnZoneClick: true,
+        fileActionSettings: {
+            showRemove: true,
+            showUpload: false, // will be always false for resumable uploads
+            showDownload: true,
+            showZoom: true,
+            showDrag: true,
+        },
+        uploadAsync: false,
+        overwriteInitial: false,
+        dropZoneEnabled: true,
+        previewSettings: {
+            image: { width: "auto", height: "auto", 'max-width': "25%", 'max-height': "25%" },
+            html: { width: "213px", height: "160px" },
+            text: { width: "213px", height: "160px" },
+            office: { width: "213px", height: "160px" },
+            gdocs: { width: "213px", height: "160px" },
+            video: { width: "213px", height: "160px" },
+            audio: { width: "100%", height: "30px" },
+            flash: { width: "213px", height: "160px" },
+            object: { width: "213px", height: "160px" },
+            pdf: { width: "213px", height: "160px" },
+            other: { width: "213px", height: "160px" }
+        },
+        preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
+        previewFileIconSettings: { // configure your icon file extensions
+            'doc': '<i class="fas fa-file-word text-primary"></i>',
+            'xls': '<i class="fas fa-file-excel text-success"></i>',
+            'ppt': '<i class="fas fa-file-powerpoint text-danger"></i>',
+            'pdf': '<i class="fas fa-file-pdf text-danger"></i>',
+            'zip': '<i class="fas fa-file-archive text-muted"></i>',
+            'htm': '<i class="fas fa-file-code text-info"></i>',
+            'txt': '<i class="fas fa-file-alt text-info"></i>',
+            'mov': '<i class="fas fa-file-video text-warning"></i>',
+            'mp3': '<i class="fas fa-file-audio text-warning"></i>',
+            // note for these file types below no extension determination logic
+            // has been configured (the keys itself will be used as extensions)
+            'jpg': '<i class="fas fa-file-image text-danger"></i>',
+            'gif': '<i class="fas fa-file-image text-muted"></i>',
+            'png': '<i class="fas fa-file-image text-primary"></i>',
+            'default': '<i class="fas fa-file"></i>'
+        },
+        previewFileExtSettings: { // configure the logic for determining icon file extensions
+            'doc': function (ext) {
+                return ext.match(/(doc|docx)$/i);
+            },
+            'xls': function (ext) {
+                return ext.match(/(xls|xlsx)$/i);
+            },
+            'ppt': function (ext) {
+                return ext.match(/(ppt|pptx)$/i);
+            },
+            'zip': function (ext) {
+                return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+            },
+            'htm': function (ext) {
+                return ext.match(/(htm|html)$/i);
+            },
+            'txt': function (ext) {
+                return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
+            },
+            'mov': function (ext) {
+                return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+            },
+            'mp3': function (ext) {
+                return ext.match(/(mp3|wav)$/i);
+            }
+        }
+    };
+
+    GetAllFilesFromDir = () => {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: "post",
+                url: "/home/AllFileLoad",
+                success: (result) => {
+                    resolve(
+                        result.map((x) => {
+                            return {
+                                caption: x.Name,
+                                key: x.FullName,
+                                size: x.Length,
+                                type: x.Extension,
+                                //downloadUrl: "/home/FileDownload"
+                            }
+                        })
+                    )
+                },
+                error: (jqXHR, exception) => {
+                    reject({ jqXHR, exception });
+                }
+            });
+        });
+    };
+
+    fileInput.fileinput(options);
+    RefreshFiles();
+
+    function RefreshFiles() {
+        GetAllFilesFromDir().then((resolve) => {
+            console.log(resolve);
+            let initialPreview = resolve.map((x) => {
+                if (previewFileIconSettings.hasOwnProperty(x.type)) {
+                    return previewFileIconSettings[x.type];
+                }
+                else {
+                    return previewFileIconSettings["default"];
+                }
+            });
+            let initialPreviewConfig = resolve;
+
+            console.log({ initialPreview, initialPreviewConfig });
+
+            options.initialPreview = initialPreview;
+            options.initialPreviewConfig = initialPreviewConfig;
+            fileInput.fileinput('destroy').fileinput(options);
+        })
+            .catch((reject) => {
+                console.error(reject);
+            });
+    };
+
+    fileInput.on('filebatchpreupload', function (event, data) {
+        console.log({ address: "filebatchpreupload", event, data });
+        if (!confirm('Dosyayı yüklemek istediğinize emin misiniz?')) {
+            return {
+                message: "Yükleme işlemi iptal edildi!", // upload error message
+                data: {} // any other data to send that can be referred in `filecustomerror`
+            };
+        }
+    });
+    fileInput.on('filebatchuploadsuccess', function (event, data) {
+        console.log({ address: "filebatchuploadsuccess", event, data });
+        RefreshFiles();
+    });
+    fileInput.on('filebatchuploaderror', function (event, data, msg) {
+        console.log({ address: "filebatchuploaderror", event, data, msg });
+        RefreshFiles();
+    });
+    fileInput.on('filepredelete', function (event, key, jqXHR, data) {
+        console.log({ address: "filepredelete", event, key, jqXHR, data });
+        return !confirm('Dosyayı silmek istediğinize emin misiniz?')
+    });
+    fileInput.on('filedeleted', function (event, key, jqXHR, data) {
+        console.log({ address: "filedeleted", event, key, jqXHR, data });
+    });
+    fileInput.on('filedeleteerror', function (event, data, msg) {
+        console.log({ address: "filedeleteerror", event, data, msg });
+    });
+</script>
